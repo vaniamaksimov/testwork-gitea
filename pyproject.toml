@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "testwork-gitea"
+version = "0.1.0"
+description = ""
+authors = ["vaniamaksimov <vaniamaksimov@gmail.com>"]
+readme = "README.md"
+packages = [{include = "testwork_gitea"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pytest = "^7.4.0"
+selenium = "^4.10.0"
+docker = "^6.1.3"
+requests = "^2.31.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+testpaths = ["tests",]
+filterwarnings = ["ignore:DeprecationWarning",]
+norecursedirs = [".venv",]
+python_files = ["test_*.py",]
+python_functions = ["test_*",]
+pythonpath = [".",]
+addopts = ["-vv", "-p", "no:cacheprovider", "--tb=long"]
+disable_test_id_escaping_and_forfeit_all_rights_to_community_support = "True"
+markers = [
+    "test_case: Тесты по описанным тест кейсам, в случае провала теста все последующие тесты в классе получат марку xfail с названием упавшего теста",
+    "ui: Тесты пользовательского интерфейса",
+]
