@@ -26,3 +26,4 @@ urllib3==2.0.3
 urllib3[socks]==2.0.3
 websocket-client==1.6.1
 wsproto==1.2.0
+pytest-xdist[psutil]==3.3.1

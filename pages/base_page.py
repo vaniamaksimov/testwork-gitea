@@ -1,10 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import TypeVar
+from typing import Protocol
 
-from selenium.common.exceptions import (
-    NoSuchElementException,
-    TimeoutException,
-)
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support import expected_conditions as EC
@@ -12,8 +9,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 from locators.header import UnloggedHeaderLocators
 from locators.login import LoginLocators
+from utils.app_types import Driver
 
-Driver = TypeVar("Driver", bound=WebDriver)
 
 class Page(ABC):
     def __init__(self, browser: Driver, url: str, timeout: int | float = 1) -> None:
@@ -22,7 +19,7 @@ class Page(ABC):
         self.browser.implicitly_wait(timeout)
 
     @abstractmethod
-    def open(self):
+    def open(self) -> None:
         """Открывает страницу."""
 
     @abstractmethod
@@ -35,7 +32,7 @@ class Page(ABC):
 
 
 class BasePage(Page):
-    def open(self):
+    def open(self) -> None:
         self.browser.get(self.url)
 
     def element_present(self, method: By, selector: str) -> bool:
@@ -59,6 +56,7 @@ class BasePage(Page):
     def element_visable(
         self, method: By, selector: str, timeout: int | float = 1
     ) -> bool:
+        """Проверяет визуальное присуствие элемента на странице."""
         try:
             WebDriverWait(self.browser, timeout).until(
                 EC.visibility_of_element_located((method, selector))
@@ -67,7 +65,20 @@ class BasePage(Page):
             return False
         return True
 
-    def login(self, login: str, password: str) -> None:
+
+class PageProtocol(Protocol):
+    @property
+    def browser(self) -> WebDriver: ...
+
+    @property
+    def url(self) -> str: ...
+
+
+class LoginMixin:
+    """Миксин определяющий возможность перейти на страницу логина с текущей страницы."""
+
+    def login(self: PageProtocol, login: str, password: str) -> None:
+        """Логин на страницу."""
         login_link = self.browser.find_element(*UnloggedHeaderLocators.login_link)
         login_link.click()
         user_input = self.browser.find_element(*LoginLocators.user_name_input)

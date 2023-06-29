@@ -30,6 +30,7 @@ class TestCase1:
         self.driver = driver
 
     def test_register(self, main_page_url: str):
+        """Регистрация пользователя."""
         page = MainPage(self.driver, main_page_url)
         page.open()
         register_link = self.driver.find_element(*UnloggedHeaderLocators.register_link)
@@ -48,6 +49,7 @@ class TestCase1:
         assert message_text.text == 'Учётная запись была успешно создана.'
 
     def test_create_repo(self, main_page_url: str):
+        """Создание репозитория."""
         page = MainPage(self.driver, main_page_url)
         page.open()
         page.login('AnotherUsername', 'AnotherUserPassword')
@@ -62,6 +64,7 @@ class TestCase1:
         assert current_url == expected_url
 
     def test_commit_file(self, main_page_url: str):
+        """Добавление файла в репозиторий."""
         page = RepoPage(self.driver, main_page_url + 'AnotherUsername/AnotherUsernameRepo')
         page.open()
         page.login('AnotherUsername', 'AnotherUserPassword')
@@ -77,6 +80,7 @@ class TestCase1:
         assert current_url == expected_url
 
     def test_text_file(self, main_page_url: str):
+        """Проверка соответствия текста в созданном файле."""
         page = FilePage(self.driver, main_page_url + 'AnotherUsername/AnotherUsernameRepo/src/branch/main/AnotherUserFile')
         page.open()
         page.login('AnotherUsername', 'AnotherUserPassword')

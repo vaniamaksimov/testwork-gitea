@@ -6,6 +6,7 @@ from locators.header import LoggedInHeaderLocators, UnloggedHeaderLocators
 
 
 def test_guest_header(driver: DriverType, main_page_url: str):
+    """Тест хидера для анонимного пользователя."""
     page = MainPage(driver, main_page_url)
     page.open()
     assert page.element_visable(*UnloggedHeaderLocators.main_link)
@@ -39,6 +40,7 @@ def test_guest_header(driver: DriverType, main_page_url: str):
     ]
 )
 def test_user_header(driver: DriverType, main_page_url: str, login: str, password: str):
+    """Тест хидера для зарегистрированного пользователя / администратора."""
     page = MainPage(driver, main_page_url)
     page.open()
     page.login(login, password)

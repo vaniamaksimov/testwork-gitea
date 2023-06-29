@@ -1,5 +1,5 @@
-from pages.base_page import BasePage
+from pages.base_page import BasePage, LoginMixin
 
 
-class RepoPage(BasePage):
+class RepoPage(LoginMixin, BasePage):
     ...

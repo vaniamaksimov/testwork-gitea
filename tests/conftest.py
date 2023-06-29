@@ -1,20 +1,14 @@
-from http import HTTPStatus
-from time import sleep
-from typing import Callable, TypeAlias, TypeVar
-
 import docker as dockerlib
 import pytest
-import requests
 from _pytest.fixtures import SubRequest
 from docker.models.containers import Container
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.remote.webdriver import WebDriver
+from utils.app_browsers import BROWSERS
+from utils.app_funcs import healtcheck_gitea
 
-DriverType = TypeVar('DriverType', bound=WebDriver)
+from utils.app_types import Driver, HttpPort, SSHPort
+
+
 _test_failed_incremental: dict[str, dict[tuple[int, ...], str]] = {}
-HttpPort: TypeAlias = int
-SSHPort: TypeAlias = int
 
 
 pytest_plugins = [
@@ -66,48 +60,9 @@ def pytest_runtest_setup(item: pytest.Function):
                 pytest.xfail(f"XFAIL / причина: {test_name} завершился ошибкой.")
 
 
-def get_chrome_driver() -> webdriver.Chrome:
-    """Конфигурация Chrome браузера."""
-    options = Options()
-    options.add_argument("--ignore-certificate-errors")
-    options.add_argument("--ignore-ssl-errors")
-    options.add_argument('--disable-infobars')
-    options.add_argument("--disable-extensions")
-    options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    browser = webdriver.Chrome(options=options)
-    return browser
-
-
-def get_firefox_driver() -> webdriver.Firefox:
-    """Конфигурация Firefox браузера"""
-    firefox_profile = webdriver.FirefoxProfile()
-    browser = webdriver.Firefox(firefox_profile=firefox_profile)
-    return browser
-
-
-BROWSERS: dict[str, Callable[[], DriverType]] = {
-    "chrome": get_chrome_driver,
-    "firefox": get_firefox_driver,
-}
-
-
-def healtcheck_gitea(http_port: int) -> None:
-    timeout = 0.001
-    for i in range(100):
-        try:
-            response = requests.get(f'http://127.0.0.1:{http_port}/')
-            if response.status_code == HTTPStatus.OK:
-                return
-            sleep(timeout)
-            timeout *= 2
-        except requests.exceptions.ConnectionError:
-            sleep(timeout)
-            timeout *= 2
-    raise ConnectionError('docker container did not establish a connection')
-
-
 @pytest.fixture(scope='session')
 def gitea_ports(unused_port) -> tuple[HttpPort, SSHPort]:
+    """Свободные порты для контейнера."""
     http_port = unused_port()
     ssh_port = unused_port()
     return http_port, ssh_port
@@ -117,6 +72,7 @@ def gitea_ports(unused_port) -> tuple[HttpPort, SSHPort]:
 def create_gitea_container(docker: dockerlib.DockerClient,
                            gitea_ports: tuple[HttpPort, SSHPort],
                            session_id: str) -> None:
+    """Запускает локальный контейнер Gitea."""
     http_port, ssh_port = gitea_ports
     docker.images.pull('gitea/gitea', tag='latest')
     container: Container = docker.containers.run(
@@ -143,7 +99,7 @@ def main_page_url(gitea_ports: tuple[HttpPort, SSHPort]) -> str:
 
 
 @pytest.fixture
-def driver(request: SubRequest) -> DriverType:
+def driver(request: SubRequest) -> Driver:
     """yield фикстура вовращающая selenium драйвер."""
     browser_name = request.config.getoption('browser')
     if browser_name in BROWSERS:
