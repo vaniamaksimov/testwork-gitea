@@ -9,7 +9,7 @@ from locators.repo import InitRepoCodeLocators, RepoCreateFile
 from pages.file_page import FilePage
 from pages.main_page import MainPage
 from pages.repo_page import RepoPage
-from tests.conftest import DriverType
+from utils.app_types import Driver
 
 
 @pytest.mark.test_case
@@ -26,7 +26,7 @@ class TestCase1:
     """
 
     @pytest.fixture(autouse=True)
-    def _driver(self, driver: DriverType):
+    def _driver(self, driver: Driver):
         self.driver = driver
 
     def test_register(self, main_page_url: str):

@@ -1,6 +1,6 @@
 import pytest
 from pages.main_page import MainPage
-from tests.conftest import DriverType
+from utils.app_types import Driver
 
 from locators.footer import FooterLocators
 
@@ -13,7 +13,7 @@ from locators.footer import FooterLocators
         ('gitea_user', 'gitea_user'),
     ]
 )
-def test_footer(driver: DriverType, main_page_url: str, login: str, password: str):
+def test_footer(driver: Driver, main_page_url: str, login: str, password: str):
     """Тест футера для анонимного / залогиненного пользователя / администратора."""
     page = MainPage(driver, main_page_url)
     page.open()

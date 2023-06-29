@@ -1,11 +1,11 @@
 import pytest
 from pages.main_page import MainPage
-from tests.conftest import DriverType
+from utils.app_types import Driver
 
 from locators.header import LoggedInHeaderLocators, UnloggedHeaderLocators
 
 
-def test_guest_header(driver: DriverType, main_page_url: str):
+def test_guest_header(driver: Driver, main_page_url: str):
     """Тест хидера для анонимного пользователя."""
     page = MainPage(driver, main_page_url)
     page.open()
@@ -39,7 +39,7 @@ def test_guest_header(driver: DriverType, main_page_url: str):
         ('gitea_user', 'gitea_user'),
     ]
 )
-def test_user_header(driver: DriverType, main_page_url: str, login: str, password: str):
+def test_user_header(driver: Driver, main_page_url: str, login: str, password: str):
     """Тест хидера для зарегистрированного пользователя / администратора."""
     page = MainPage(driver, main_page_url)
     page.open()
