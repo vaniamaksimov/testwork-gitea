@@ -3,7 +3,7 @@ import pytest
 from _pytest.fixtures import SubRequest
 from docker.models.containers import Container
 from utils.app_browsers import BROWSERS
-from utils.app_funcs import healtcheck_gitea
+from utils.app_functions import healtcheck_gitea
 
 from utils.app_types import Driver, HttpPort, SSHPort
 
