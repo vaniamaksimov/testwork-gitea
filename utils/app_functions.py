@@ -1,8 +1,8 @@
 from http import HTTPStatus
 from time import sleep
 
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 
 
 def healtcheck_gitea(http_port: int) -> None:

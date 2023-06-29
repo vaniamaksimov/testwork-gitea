@@ -1,8 +1,8 @@
 import pytest
-from pages.main_page import MainPage
-from utils.app_types import Driver
 
 from locators.footer import FooterLocators
+from pages.main_page import MainPage
+from utils.app_types import Driver
 
 
 @pytest.mark.parametrize(

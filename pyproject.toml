@@ -42,7 +42,7 @@ markers = [
 [tool.ruff]
 fix = true
 src = ["tests"]
-select = ["E", "F"]
+select = ["E", "F", "I"]
 ignore = []
 fixable = ["A", "B", "C", "D", "E", "F", "G", "I", "N", "Q", "S", "T", "W", "ANN", "ARG", "BLE", "COM", "DJ", "DTZ", "EM", "ERA", "EXE", "FBT", "ICN", "INP", "ISC", "NPY", "PD", "PGH", "PIE", "PL", "PT", "PTH", "PYI", "RET", "RSE", "RUF", "SIM", "SLF", "TCH", "TID", "TRY", "UP", "YTT"]
 unfixable = []
@@ -81,3 +81,7 @@ max-complexity = 10
 [tool.black]
 line-length = 100
 skip-string-normalization = true
+
+
+[tool.ruff.isort]
+known-first-party = ["utils", "locators", "pages", "tests"]

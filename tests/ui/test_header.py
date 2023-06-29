@@ -1,8 +1,8 @@
 import pytest
-from pages.main_page import MainPage
-from utils.app_types import Driver
 
 from locators.header import LoggedInHeaderLocators, UnloggedHeaderLocators
+from pages.main_page import MainPage
+from utils.app_types import Driver
 
 
 def test_guest_header(driver: Driver, main_page_url: str):

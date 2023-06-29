@@ -2,9 +2,9 @@ from dataclasses import dataclass
 
 from selenium.webdriver.common.by import By
 
-from .header import UnloggedHeaderLocators, LoggedInHeaderLocators
-from .footer import FooterLocators
 from .base import BasePageLocators
+from .footer import FooterLocators
+from .header import LoggedInHeaderLocators, UnloggedHeaderLocators
 
 
 @dataclass
