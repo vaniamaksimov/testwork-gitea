@@ -11,7 +11,7 @@ from locators.footer import FooterLocators
         (None, None),
         ('gitea_admin', 'gitea_admin'),
         ('gitea_user', 'gitea_user'),
-    ]
+    ],
 )
 def test_footer(driver: Driver, main_page_url: str, login: str, password: str):
     """Тест футера для анонимного / залогиненного пользователя / администратора."""

@@ -37,7 +37,7 @@ def test_guest_header(driver: Driver, main_page_url: str):
     argvalues=[
         ('gitea_admin', 'gitea_admin'),
         ('gitea_user', 'gitea_user'),
-    ]
+    ],
 )
 def test_user_header(driver: Driver, main_page_url: str, login: str, password: str):
     """Тест хидера для зарегистрированного пользователя / администратора."""

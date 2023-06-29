@@ -76,12 +76,17 @@ class TestCase1:
         self.driver.switch_to.active_element.send_keys('AnotherUserCode')
         self.driver.find_element(*RepoCreateFile.commit_button).click()
         current_url = self.driver.current_url
-        expected_url = main_page_url + 'AnotherUsername/AnotherUsernameRepo/src/branch/main/AnotherUserFile'
+        expected_url = (
+            main_page_url + 'AnotherUsername/AnotherUsernameRepo/src/branch/main/AnotherUserFile'
+        )
         assert current_url == expected_url
 
     def test_text_file(self, main_page_url: str):
         """Проверка соответствия текста в созданном файле."""
-        page = FilePage(self.driver, main_page_url + 'AnotherUsername/AnotherUsernameRepo/src/branch/main/AnotherUserFile')
+        page = FilePage(
+            self.driver,
+            main_page_url + 'AnotherUsername/AnotherUsernameRepo/src/branch/main/AnotherUserFile',
+        )
         page.open()
         page.login('AnotherUsername', 'AnotherUserPassword')
         code = self.driver.find_element(*FileLocators.code).text

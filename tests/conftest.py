@@ -18,12 +18,7 @@ pytest_plugins = [
 
 def pytest_addoption(parser: pytest.Parser):
     """Добавляем CLI опцию для запуска тестов на другом браузере."""
-    parser.addoption(
-        '--browser',
-        action='store',
-        default='chrome',
-        help='Choose browser'
-    )
+    parser.addoption('--browser', action='store', default='chrome', help='Choose browser')
 
 
 def pytest_runtest_makereport(item: pytest.Function, call: pytest.CallInfo):
@@ -35,9 +30,7 @@ def pytest_runtest_makereport(item: pytest.Function, call: pytest.CallInfo):
         if call.excinfo is not None:
             cls_name = str(item.cls)
             parametrize_index = (
-                tuple(item.callspec.indices.values())
-                if hasattr(item, "callspec")
-                else ()
+                tuple(item.callspec.indices.values()) if hasattr(item, "callspec") else ()
             )
             test_name = item.originalname or item.name
             _test_failed_incremental.setdefault(cls_name, {}).setdefault(
@@ -51,9 +44,7 @@ def pytest_runtest_setup(item: pytest.Function):
         cls_name = str(item.cls)
         if cls_name in _test_failed_incremental:
             parametrize_index = (
-                tuple(item.callspec.indices.values())
-                if hasattr(item, "callspec")
-                else ()
+                tuple(item.callspec.indices.values()) if hasattr(item, "callspec") else ()
             )
             test_name = _test_failed_incremental[cls_name].get(parametrize_index, None)
             if test_name is not None:
@@ -69,9 +60,9 @@ def gitea_ports(unused_port) -> tuple[HttpPort, SSHPort]:
 
 
 @pytest.fixture(scope='session', autouse=True)
-def create_gitea_container(docker: dockerlib.DockerClient,
-                           gitea_ports: tuple[HttpPort, SSHPort],
-                           session_id: str) -> None:
+def create_gitea_container(
+    docker: dockerlib.DockerClient, gitea_ports: tuple[HttpPort, SSHPort], session_id: str
+) -> None:
     """Запускает локальный контейнер Gitea."""
     http_port, ssh_port = gitea_ports
     docker.images.pull('gitea/gitea', tag='latest')
@@ -83,8 +74,20 @@ def create_gitea_container(docker: dockerlib.DockerClient,
         detach=True,
     )
     healtcheck_gitea(http_port)
-    container.exec_run('su -c "gitea admin user create --username gitea_admin --password gitea_admin --email gitea_admin@gitea.com --admin --must-change-password=false" git', detach=True)
-    container.exec_run('su -c "gitea admin user create --username gitea_user --password gitea_user --email gitea_user@gitea.com --must-change-password=false" git', detach=True)
+    container.exec_run(
+        (
+            'su -c "gitea admin user create --username gitea_admin --password '
+            'gitea_admin --email gitea_admin@gitea.com --admin --must-change-password=false" git'
+        ),
+        detach=True,
+    )
+    container.exec_run(
+        (
+            'su -c "gitea admin user create --username gitea_user --password '
+            'gitea_user --email gitea_user@gitea.com --must-change-password=false" git'
+        ),
+        detach=True,
+    )
     yield container
     container.kill()
     container.remove()

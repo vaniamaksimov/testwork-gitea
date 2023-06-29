@@ -15,10 +15,12 @@ def session_id() -> str:
 @pytest.fixture(scope='session')
 def unused_port() -> Callable[[], int]:
     """Фикстура определяющая свободный порт."""
+
     def factory():
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sckt:
             sckt.bind(('127.0.0.1', 0))
             return sckt.getsockname()[1]
+
     return factory
 
 

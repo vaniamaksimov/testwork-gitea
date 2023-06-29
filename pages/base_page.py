@@ -42,9 +42,7 @@ class BasePage(Page):
             return False
         return True
 
-    def not_element_present(
-        self, method: By, selector: str, timeout: int | float = 1
-    ) -> bool:
+    def not_element_present(self, method: By, selector: str, timeout: int | float = 1) -> bool:
         try:
             WebDriverWait(self.browser, timeout).until(
                 EC.presence_of_element_located((method, selector))
@@ -53,9 +51,7 @@ class BasePage(Page):
             return True
         return False
 
-    def element_visable(
-        self, method: By, selector: str, timeout: int | float = 1
-    ) -> bool:
+    def element_visable(self, method: By, selector: str, timeout: int | float = 1) -> bool:
         """Проверяет визуальное присуствие элемента на странице."""
         try:
             WebDriverWait(self.browser, timeout).until(
@@ -68,10 +64,12 @@ class BasePage(Page):
 
 class PageProtocol(Protocol):
     @property
-    def browser(self) -> WebDriver: ...
+    def browser(self) -> WebDriver:
+        ...
 
     @property
-    def url(self) -> str: ...
+    def url(self) -> str:
+        ...
 
 
 class LoginMixin:
